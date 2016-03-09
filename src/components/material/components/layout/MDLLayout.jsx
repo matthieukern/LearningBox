@@ -27,7 +27,7 @@ var MDLLayout = React.createClass({
             } else if (type == MDLDrawer) {
                 drawer = elem;
             } else if (type == "main") {
-                content = elem;
+                content = React.cloneElement(elem, {className: 'mdl-layout__content'});
             }
         });
 

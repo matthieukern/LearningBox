@@ -41,7 +41,7 @@ var MDLCard = React.createClass({
         var content = null;
 
         React.Children.toArray(this.props.children).forEach(function(elem) {
-            if (elem.props.className == 'card-content') {
+            if (elem.props && elem.props.className == 'card-content') {
                 content = elem;
             }
         });
@@ -58,7 +58,7 @@ var MDLCard = React.createClass({
         var actions = null;
 
         React.Children.toArray(this.props.children).forEach(function(elem) {
-            if (elem.props.className == 'card-actions') {
+            if (elem.props && elem.props.className == 'card-actions') {
                 actions = elem;
             }
         });
