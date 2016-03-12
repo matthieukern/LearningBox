@@ -12,10 +12,21 @@ import MDLGrid from './../material/components/layout/MDLGrid.jsx'
 import MDLCell from './../material/components/layout/MDLCell.jsx'
 
 var Layout = React.createClass({
+    componentDidMount: function() {
+        var header = document.getElementById('layoutHeader');
+        var main = document.getElementById('layoutMainContainer');
+        var content = document.getElementById('layoutPageContent');
+        var onresize = function(e) {
+            main.minHeight = main.style.minHeight = content.minHeight = content.style.minHeight = window.innerHeight - header.offsetHeight;
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+    },
+
     render: function() {
         return (
             <MDLLayout style={this.style} fixedHeader>
-                <MDLHeader>
+                <MDLHeader id="layoutHeader">
                     <h1><Link to={`/`} style={{textDecoration: 'none', color: 'white'}}>Learning Box</Link></h1>
                     <MDLNavigation>
                         <Link to={`/editor`}>Éditeur</Link>
@@ -31,8 +42,8 @@ var Layout = React.createClass({
                         <Link to={`/about`}>À propos</Link>
                     </MDLNavigation>
                 </MDLDrawer>
-                <main>
-                    <div className="page-content" style={{height: '100%'}}>{this.props.children}</div>
+                <main id="layoutMainContainer">
+                    <div id="layoutPageContent" className="page-content">{this.props.children}</div>
                 </main>
             </MDLLayout>
         );

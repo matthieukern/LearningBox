@@ -35,7 +35,7 @@ var MDLHeader = React.createClass({
         });
 
         return (
-            <header className={this._getClasses()}>
+            <header className={this._getClasses()} {...this.props}>
                 <div className="mdl-layout__header-row">
                     <span className="mdl-layout-title">{title}</span>
                     <div className="mdl-layout-spacer"></div>
