@@ -13,8 +13,9 @@ export function gameSourceCodeChanged(code) {
 export function engine() {
 	emitter.on('sourceCodeChanged', function(code) {
 		// On source code change
-		console.log(code);
+        console.log(code);
 		var JsonCode = JSON.parse(code);
+        console.log(JsonCode);
 		if (JsonCode.hasOwnProperty('associations'))
 		{
 			console.log("Associations");

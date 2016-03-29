@@ -25,6 +25,10 @@ Blockly.JavaScript['associateonetoone'] = function(block) {
 	statements_element = statements_element.slice(0, statements_element.length - 2);
 	statements_errors = statements_errors.slice(0, statements_errors.length - 2);
 	statements_possibility = statements_possibility.slice(0, statements_possibility.length - 2);
+	if (statements_element.length == 0)
+		statements_element = null;
+	if (statements_possibility.length == 0)
+		statements_possibility = null;
 	// TODO: Assemble JavaScript into code variable.
 	var code =
 		'{\n' +
