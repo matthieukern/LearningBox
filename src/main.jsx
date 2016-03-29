@@ -9,9 +9,6 @@ import EditorScreen from './components/screens/EditorScreen.jsx'
 import GalleryScreen from './components/screens/GalleryScreen.jsx'
 import AboutScreen from './components/screens/AboutScreen.jsx'
 
-import EditorAssociationsGameScreen from './components/screens/editor/EditorAssociationsGameScreen.jsx'
-import AssociationItem from './components/screens/editor/AssociationItem.jsx'
-
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={Layout}>
