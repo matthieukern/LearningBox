@@ -16,11 +16,7 @@ ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={Layout}>
             <IndexRoute component={MainScreen} />
-            <Route path="editor" component={EditorScreen}>
-                <Route path="associations" component={EditorAssociationsGameScreen}>
-                    <Route path="/editor/associations/:itemId" component={AssociationItem} />
-                </Route>
-            </Route>
+            <Route path="editor" component={EditorScreen} />
             <Route path="gallery" component={GalleryScreen} />
             <Route path="about" component={AboutScreen} />
         </Route>

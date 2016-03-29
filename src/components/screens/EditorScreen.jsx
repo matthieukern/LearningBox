@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 
 import MDLButton from './../material/components/MDLButton.jsx'
 import MDLCard from './../material/components/MDLCard.jsx'
+import GameScene from './GameScene.jsx'
 
 var EditorScreen = React.createClass({
     cardsStyle: {
@@ -171,7 +172,7 @@ var EditorScreen = React.createClass({
         var onresize = function(e) {
             blocklyArea.height = mainContent.minHeight;
 
-            blocklyDiv.style.width = window.innerWidth + 'px';
+            blocklyDiv.style.width = window.innerWidth - document.getElementById('gameScene').clientWidth + 'px';
             blocklyDiv.style.height = blocklyArea.height + 'px';
         };
         window.addEventListener('resize', onresize, false);
@@ -202,10 +203,19 @@ var EditorScreen = React.createClass({
         console.log(code);
     },
 
+	_showGameScene: function() {
+		console.log('game scene');
+	},
+
     render: function() {
         return (
             <div>
-                <div id="blocklyArea">
+				<div id="gameScene" style={{width: '40%', position: 'fixed', height: '100%', left: 0, top: 64}}>
+					<div style={{height: '100%', backgroundImage: 'radial-gradient(white, #D8D8D8)', backgroundSize: 'contain'}}>
+						<GameScene />
+					</div>
+				</div>
+                <div id="blocklyArea" style={{marginLeft: '40%'}}>
                     <div id="blocklyDiv" style={{position: 'absolute'}}></div>
                 </div>
             </div>
