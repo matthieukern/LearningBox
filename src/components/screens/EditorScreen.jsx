@@ -211,7 +211,7 @@ var EditorScreen = React.createClass({
         return (
             <div>
 				<div id="gameScene" style={{width: '40%', position: 'fixed', height: '100%', left: 0, top: 64}}>
-					<div style={{height: '100%', backgroundImage: 'radial-gradient(white, #D8D8D8)', backgroundSize: 'contain'}}>
+					<div style={{height: '100%'}}>
 						<GameScene />
 					</div>
 				</div>
