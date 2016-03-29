@@ -6,14 +6,13 @@ Blockly.Blocks['defih_image'] = {
 		this.appendDummyInput()
 			.appendField("URL")
 			.appendField(new Blockly.FieldTextInput("http://www.example.com/"), "URL");
-		this.setPreviousStatement(true, "DEFIH_OBJECT");
-		this.setNextStatement(true, "DEFIH_OBJECT");
+		this.setPreviousStatement(true, "Value");
+		this.setNextStatement(true, "Value");
 		this.setColour(290);
 		this.setTooltip('');
 		this.setHelpUrl('http://www.example.com/');
 	}
 };
-
 Blockly.JavaScript['defih_image'] = function(block) {
 	var text_url = block.getFieldValue('URL');
 	// TODO: Assemble JavaScript into code variable.

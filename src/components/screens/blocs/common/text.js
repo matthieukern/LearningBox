@@ -7,14 +7,13 @@ Blockly.Blocks['defih_text'] = {
 			.appendField(" ")
 			.appendField(new Blockly.FieldTextInput("Tapez votre texte ici..."), "TEXT")
 			.appendField(" ");
-		this.setPreviousStatement(true, "DEFIH_OBJECT");
-		this.setNextStatement(true, "DEFIH_OBJECT");
+		this.setPreviousStatement(true, "Value");
+		this.setNextStatement(true, "Value");
 		this.setColour(290);
 		this.setTooltip('');
 		this.setHelpUrl('http://www.example.com/');
 	}
 };
-
 Blockly.JavaScript['defih_text'] = function(block) {
 	var text_text = block.getFieldValue('TEXT');
 	// TODO: Assemble JavaScript into code variable.
