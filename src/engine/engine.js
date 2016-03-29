@@ -12,9 +12,23 @@ export function gameSourceCodeChanged(code) {
 
 export function engine() {
 	emitter.on('sourceCodeChanged', function(code) {
-		// On source code changed
+		// On source code change
 		console.log(code);
+		assembly();
 	});
 
 	// Engine code...
+	function assembly () {
+
+
+		var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, 100, 100);
+		var testShape = new createjs.Shape(graphics);
+		stage.addChild(testShape);
+
+		console.log("NEW TEST SHAPE");
+		stage.update();
+	}
+
+
+
 }

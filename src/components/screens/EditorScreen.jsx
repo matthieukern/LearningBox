@@ -17,19 +17,8 @@ var EditorScreen = React.createClass({
         return (
             '<xml>' +
                 '<category name="Associations">' +
-                    '<block type="defih_association_game">' +
-                        '<value name="LEFT_NUMBER">' +
-                            '<block type="math_number">' +
-                                '<field name="NUM">1</field>' +
-                            '</block>' +
-                        '</value>' +
-                        '<value name="RIGHT_NUMBER">' +
-                            '<block type="math_number">' +
-                                '<field name="NUM">5</field>' +
-                            '</block>' +
-                        '</value>' +
-                    '</block>' +
-                    '<block type="defih_associate" />' +
+                    '<block type="exercises" />' +
+                    '<block type="associateonetoone" />' +
                     '<block type="defih_image" />' +
                     '<block type="defih_text" />' +
                 '</category>' +
@@ -38,77 +27,6 @@ var EditorScreen = React.createClass({
     },
 
     createBlocs: function() {
-        Blockly.Blocks['defih_association_game'] = {
-            init: function() {
-                this.appendValueInput("LEFT_NUMBER")
-                    .setCheck("Number")
-                    .appendField("Associer");
-                this.appendValueInput("RIGHT_NUMBER")
-                    .setCheck("Number")
-                    .appendField("éléments de gauche à");
-                this.appendDummyInput()
-                    .appendField("de droite");
-                this.appendStatementInput("ASSOCIATIONS")
-                    .setCheck("DEFIH_ASSOCIATE")
-                    .appendField("parmi");
-                this.setInputsInline(true);
-                this.setColour(120);
-                this.setTooltip('');
-                this.setHelpUrl('http://www.example.com/');
-            }
-        };
-        Blockly.JavaScript['defih_association_game'] = function(block) {
-            var value_left_number = Blockly.JavaScript.valueToCode(block, 'LEFT_NUMBER', Blockly.JavaScript.ORDER_ATOMIC);
-            var value_right_number = Blockly.JavaScript.valueToCode(block, 'RIGHT_NUMBER', Blockly.JavaScript.ORDER_ATOMIC);
-            var statements_associations = Blockly.JavaScript.statementToCode(block, 'ASSOCIATIONS');
-            // TODO: Assemble JavaScript into code variable.
-            statements_associations = statements_associations.slice(0, statements_associations.length - 2);
-            var code =
-                '{\n' +
-                    '"leftNumber": ' + value_left_number + ',\n' +
-                    '"rightNumber": ' + value_right_number + ',\n' +
-                    '"associations": [\n' +
-                        statements_associations + '\n' +
-                    ']\n' +
-                '}';
-            return code;
-        };
-
-        Blockly.Blocks['defih_associate'] = {
-            init: function() {
-                this.appendDummyInput()
-                    .appendField("association de ces éléments :");
-                this.appendStatementInput("LABEL")
-                    .setCheck("DEFIH_OBJECT");
-                this.appendDummyInput()
-                    .appendField("avec ces éléments :");
-                this.appendStatementInput("POSSIBILITIES")
-                    .setCheck("DEFIH_OBJECT");
-                this.setPreviousStatement(true, "DEFIH_ASSOCIATE");
-                this.setNextStatement(true, "DEFIH_ASSOCIATE");
-                this.setColour(65);
-                this.setTooltip('');
-                this.setHelpUrl('http://www.example.com/');
-            }
-        };
-        Blockly.JavaScript['defih_associate'] = function(block) {
-            var statements_label = Blockly.JavaScript.statementToCode(block, 'LABEL');
-            var statements_possibilities = Blockly.JavaScript.statementToCode(block, 'POSSIBILITIES');
-            // TODO: Assemble JavaScript into code variable.
-            statements_label = statements_label.slice(0, statements_label.length - 2);
-            statements_possibilities = statements_possibilities.slice(0, statements_possibilities.length - 2);
-            var code =
-                '{\n' +
-                    '"labels": [\n' +
-                        statements_label + '\n' +
-                    '],\n' +
-                    '"possibilities": [\n' +
-                        statements_possibilities + '\n' +
-                    ']\n' +
-                '},\n';
-            return code;
-        };
-
         Blockly.Blocks['defih_image'] = {
             init: function() {
                 this.appendDummyInput()
@@ -117,8 +35,8 @@ var EditorScreen = React.createClass({
                 this.appendDummyInput()
                     .appendField("URL")
                     .appendField(new Blockly.FieldTextInput("http://www.example.com/"), "URL");
-                this.setPreviousStatement(true, "DEFIH_OBJECT");
-                this.setNextStatement(true, "DEFIH_OBJECT");
+                this.setPreviousStatement(true, "Value");
+                this.setNextStatement(true, "Value");
                 this.setColour(290);
                 this.setTooltip('');
                 this.setHelpUrl('http://www.example.com/');
@@ -144,8 +62,8 @@ var EditorScreen = React.createClass({
                     .appendField(" ")
                     .appendField(new Blockly.FieldTextInput("Tapez votre texte ici..."), "TEXT")
                     .appendField(" ");
-                this.setPreviousStatement(true, "DEFIH_OBJECT");
-                this.setNextStatement(true, "DEFIH_OBJECT");
+                this.setPreviousStatement(true, "Value");
+                this.setNextStatement(true, "Value");
                 this.setColour(290);
                 this.setTooltip('');
                 this.setHelpUrl('http://www.example.com/');
@@ -159,6 +77,64 @@ var EditorScreen = React.createClass({
                     '"type": "text",\n' +
                     '"value": "' + text_text + '",\n' +
                 '},\n';
+            return code;
+        };
+
+        Blockly.Blocks['associateonetoone'] = {
+            init: function() {
+                this.appendDummyInput()
+                    .appendField("Associer un élément à une possibilité");
+                this.appendStatementInput("Element")
+                    .setCheck("Value")
+                    .appendField("L'élément est ");
+                this.appendStatementInput("Possibility")
+                    .setCheck("Value")
+                    .appendField("La possibilité est");
+                this.appendStatementInput("Errors")
+                    .setCheck("Value")
+                    .appendField("Les erreurs sont");
+                this.setPreviousStatement(true, "Exercise");
+                this.setNextStatement(true, "Exercise");
+                this.setColour(120);
+                this.setTooltip('');
+                this.setHelpUrl('http://www.example.com/');
+            }
+        };
+        Blockly.JavaScript['associateonetoone'] = function(block) {
+            var statements_element = Blockly.JavaScript.statementToCode(block, 'Element');
+            var statements_possibility = Blockly.JavaScript.statementToCode(block, 'Possibility');
+            var statements_errors = Blockly.JavaScript.statementToCode(block, 'Errors');
+            // TODO: Assemble JavaScript into code variable.
+            var code =
+                '{\n' +
+                '"type": associateonetoone",\n' +
+                '"element": "' + statements_element + '",\n' +
+                '"possibility": "' + statements_possibility + '",\n' +
+                '"errors":  [\n' + statements_errors + '\n]' +
+                '},\n';
+            return code;
+        };
+
+        Blockly.Blocks['exercises'] = {
+            init: function() {
+                this.appendDummyInput()
+                    .appendField("Liste des exercices");
+                this.appendStatementInput("Exercises")
+                    .setCheck(null)
+                    .setAlign(Blockly.ALIGN_RIGHT);
+                this.setColour(65);
+                this.setTooltip('');
+                this.setHelpUrl('http://www.example.com/');
+                this.START_HAT = true;
+            }
+        };
+        Blockly.JavaScript['exercises'] = function(block) {
+            var statements_exercises = Blockly.JavaScript.statementToCode(block, 'Exercises');
+            // TODO: Assemble JavaScript into code variable.
+            var code =
+                '{\n' +
+                    '"exercises": [\n' + statements_exercises + '\n]' +
+                '}\n';
             return code;
         };
     },
