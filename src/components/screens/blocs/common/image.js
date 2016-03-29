@@ -19,7 +19,7 @@ Blockly.JavaScript['defih_image'] = function(block) {
 	var code =
 		'{\n' +
 		'"type": "image_url",\n' +
-		'"value": "' + text_url + '",\n' +
+		'"value": "' + text_url + '"\n' +
 		'},\n';
 	return code;
 };

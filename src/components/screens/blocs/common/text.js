@@ -20,7 +20,7 @@ Blockly.JavaScript['defih_text'] = function(block) {
 	var code =
 		'{\n' +
 		'"type": "text",\n' +
-		'"value": "' + text_text + '",\n' +
+		'"value": "' + text_text + '"\n' +
 		'},\n';
 	return code;
 };

@@ -13,6 +13,7 @@ Blockly.Blocks['exercises'] = {
 };
 Blockly.JavaScript['exercises'] = function(block) {
 	var statements_exercises = Blockly.JavaScript.statementToCode(block, 'Exercises');
+	statements_exercises = statements_exercises.slice(0, statements_exercises.length - 2);
 	// TODO: Assemble JavaScript into code variable.
 	var code =
 		'{\n' +
