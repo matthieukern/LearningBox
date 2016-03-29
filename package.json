@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "classnames": "^2.2.3",
+    "jquery": "^2.2.1",
     "material-design-lite": "^1.1.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",

@@ -11,6 +11,30 @@ var EditorScreen = React.createClass({
         marginTop: '5px'
     },
 
+    getToolboxXml: function() {
+        return (
+            '<xml>' +
+                '<category name="Associations">' +
+                    '<block type="defih_association_game">' +
+                        '<value name="LEFT_NUMBER">' +
+                            '<block type="math_number">' +
+                                '<field name="NUM">1</field>' +
+                            '</block>' +
+                        '</value>' +
+                        '<value name="RIGHT_NUMBER">' +
+                            '<block type="math_number">' +
+                                '<field name="NUM">5</field>' +
+                            '</block>' +
+                        '</value>' +
+                    '</block>' +
+                    '<block type="defih_associate" />' +
+                    '<block type="defih_image" />' +
+                    '<block type="defih_text" />' +
+                '</category>' +
+            '</xml>'
+        );
+    },
+
     createBlocs: function() {
         Blockly.Blocks['defih_association_game'] = {
             init: function() {
@@ -147,17 +171,30 @@ var EditorScreen = React.createClass({
         var onresize = function(e) {
             blocklyArea.height = mainContent.minHeight;
 
-            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.width = window.innerWidth + 'px';
             blocklyDiv.style.height = blocklyArea.height + 'px';
         };
         window.addEventListener('resize', onresize, false);
         onresize();
         this.workspace = Blockly.inject(blocklyDiv, {
-                toolbox: document.getElementById('toolbox'),
+                toolbox: this.getToolboxXml(),
                 scrollbars: true,
                 trashcan: true
             });
         this.workspace.addChangeListener(this.onCodeUpdate);
+
+        var blocklyToolboxDiv = document.getElementsByClassName('blocklyToolboxDiv')[0];
+        var blocklyTooltipDiv = document.getElementsByClassName('blocklyTooltipDiv')[0];
+        var blocklyWidgetDiv = document.getElementsByClassName('blocklyWidgetDiv')[0];
+
+        if (blocklyToolboxDiv)
+            blocklyToolboxDiv.style.zIndex = 1;
+
+        if (blocklyTooltipDiv)
+            blocklyTooltipDiv.style.zIndex = 1;
+
+        if (blocklyWidgetDiv)
+            blocklyWidgetDiv.style.zIndex = 1;
     },
 
     onCodeUpdate: function(e) {
@@ -166,37 +203,30 @@ var EditorScreen = React.createClass({
     },
 
     render: function() {
-        if (this.props.children != null) {
-            return this.props.children;
-        }
-
-        /*
-         <MDLCard heading="Associations" style={this.cardsStyle}>
-             <div className="card-content">
-                 Mon mini-jeu se base sur des associations d'éléments. Je veux, par exemple, avoir d'un côté des
-                 lettres et de l'autre des images les représentant.
-             </div>
-             <div className="card-actions">
-                 <Link to={`/editor/associations`}><MDLButton colored>J'utilise cette base</MDLButton></Link>
-             </div>
-         </MDLCard>
-
-         */
-
         return (
             <div>
-                <xml id="toolbox" style={{display: 'none'}}>
-                    <block type="defih_association_game"></block>
-                    <block type="math_number"></block>
-                    <block type="defih_associate"></block>
-                    <block type="defih_image"></block>
-                    <block type="defih_text"></block>
-                </xml>
                 <div id="blocklyArea">
                     <div id="blocklyDiv" style={{position: 'absolute'}}></div>
                 </div>
             </div>
         );
+    },
+
+    componentWillUnmount: function() {
+        var blocklyToolboxDiv = document.getElementsByClassName('blocklyToolboxDiv')[0];
+        var blocklyTooltipDiv = document.getElementsByClassName('blocklyTooltipDiv')[0];
+        var blocklyWidgetDiv = document.getElementsByClassName('blocklyWidgetDiv')[0];
+
+        if (blocklyToolboxDiv)
+            document.body.removeChild(blocklyToolboxDiv);
+
+        if (blocklyTooltipDiv)
+            document.body.removeChild(blocklyTooltipDiv);
+
+        if (blocklyWidgetDiv)
+            document.body.removeChild(blocklyWidgetDiv);
+
+        this.workspace = null;
     }
 });
 
