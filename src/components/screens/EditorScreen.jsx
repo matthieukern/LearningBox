@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import MDLButton from './../material/components/MDLButton.jsx'
 import MDLCard from './../material/components/MDLCard.jsx'
 import GameScene from './GameScene.jsx'
+import { gameSourceCodeChanged } from '../../engine/engine'
 
 var EditorScreen = React.createClass({
     cardsStyle: {
@@ -169,6 +170,7 @@ var EditorScreen = React.createClass({
         var mainContent = document.getElementById('layoutMainContainer');
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
+
         var onresize = function(e) {
             blocklyArea.height = mainContent.minHeight;
 
@@ -200,7 +202,7 @@ var EditorScreen = React.createClass({
 
     onCodeUpdate: function(e) {
         var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-        console.log(code);
+		gameSourceCodeChanged(code);
     },
 
 	_showGameScene: function() {
