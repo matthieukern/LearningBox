@@ -16,5 +16,8 @@ gulp.task('default', function() {
                 ]
             }
         }))
+        .on('error', function() {
+            this.emit('end');
+        })
         .pipe(gulp.dest('www/scripts/'));
 });
