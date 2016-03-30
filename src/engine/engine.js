@@ -1,6 +1,9 @@
 import events from 'events'
 var emitter = new events.EventEmitter();
 
+import Scheduler from './exercises-scheduler'
+var scheduler = new Scheduler();
+
 export let stage = null;
 export function setStage(newStage) {
 	stage = newStage;
@@ -16,25 +19,7 @@ export function engine() {
         console.log(code);
 		var JsonCode = JSON.parse(code);
         console.log(JsonCode);
-		if (JsonCode.hasOwnProperty('associations'))
-		{
-			console.log("Associations");
-		    assembly();
-		}
+
+		scheduler.exercises = JsonCode.exercises;
 	});
-
-	// Engine code...
-	function assembly () {
-
-
-		var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, 100, 100);
-		var testShape = new createjs.Shape(graphics);
-		stage.addChild(testShape);
-
-		console.log("NEW TEST SHAPE");
-		stage.update();
-	}
-
-
-
 }
