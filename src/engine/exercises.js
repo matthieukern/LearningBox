@@ -18,4 +18,8 @@ export default class Exercises {
                 break;
         }
     }
+
+    dispose() {
+        // TODO: dispose all data
+    }
 }

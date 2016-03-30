@@ -1,4 +1,5 @@
 import Scheduler from './exercises-scheduler'
+import Exercise from './exercises'
 
 let instance = null;
 
@@ -11,6 +12,7 @@ class Engine {
 
 		this._exercises = null;
 		this._scheduler = new Scheduler();
+		this._currentExercise = null;
 	}
 
 	get scheduler() {
@@ -25,7 +27,13 @@ class Engine {
 			this._exercises = null;
 		}
 
-		this.scheduler.exercises = this.gameData;
+		if (this._exercises && this._exercises.length > 0) {
+			this.scheduler.exercises = this.gameData;
+			this.run();
+		} else {
+			this.scheduler.exercises = null;
+			this.stop();
+		}
 	}
 
 	get gameData() {
@@ -38,6 +46,28 @@ class Engine {
 
 	get stage() {
 		return this._stage;
+	}
+
+	run() {
+		this.stop();
+		this._currentExercise = new Exercise(this.stage, this.scheduler.currentExerciseData);
+	}
+
+	stop() {
+		if (this._currentExercise) {
+			this._currentExercise.dispose();
+			this._currentExercise = null;
+		}
+
+		this.stage.clear();
+	}
+
+	nextExercise() {
+		this.scheduler.next(this.run);
+	}
+
+	previousExercise() {
+		this.scheduler.prev(this.run);
 	}
 }
 
