@@ -15,7 +15,14 @@ export default class Scheduler {
 		return this._exercises;
 	}
 
-	next() {
+	get currentExerciseData() {
+		if (this._exercises == null)
+			return null;
+
+		return this._exercises[this._currentExercise];
+	}
+
+	next(callback) {
 		if (this.exercises == null) {
 			this._currentExercise = 0;
 			return;
@@ -25,12 +32,16 @@ export default class Scheduler {
 			return;
 
 		this._currentExercise++;
+
+		callback();
 	}
 
-	previous() {
+	previous(callback) {
 		this._currentExercise--;
 
 		if (this._currentExercise < 0)
 			this._currentExercise = 0;
+
+		callback();
 	}
 }
