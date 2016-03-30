@@ -1,5 +1,5 @@
 import React from 'react'
-import { setStage, engine } from '../../engine/engine'
+import Engine from '../../engine/engine'
 
 var GameScene = React.createClass({
 	stage: null,
@@ -10,13 +10,12 @@ var GameScene = React.createClass({
 		gameSceneCanvas.height = document.getElementById('gameScene').clientHeight;
 
 		this.stage = new createjs.Stage('gameSceneCanvas');
-		setStage(this.stage);
-		engine();
+		Engine.stage = this.stage;
 	},
 
 	render: function() {
 		return (
-			<canvas id="gameSceneCanvas" {...this.props}></canvas>
+			<canvas id="gameSceneCanvas" {...this.props} />
 		);
 	}
 });
