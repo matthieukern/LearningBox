@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import MDLButton from './../material/components/MDLButton.jsx'
 import MDLCard from './../material/components/MDLCard.jsx'
 import GameScene from './GameScene.jsx'
-import { gameSourceCodeChanged } from '../../engine/engine'
+import Engine from '../../engine/engine'
 import { initBlocs, getToolboxXML } from './blocs/blocs.jsx'
 
 var EditorScreen = React.createClass({
@@ -45,9 +45,8 @@ var EditorScreen = React.createClass({
             blocklyWidgetDiv.style.zIndex = 1;
     },
 
-    onCodeUpdate: function(e) {
-        var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-		gameSourceCodeChanged(code);
+    onCodeUpdate: function() {
+		Engine.gameData = Blockly.JavaScript.workspaceToCode(this.workspace);
     },
 
 	_showGameScene: function() {

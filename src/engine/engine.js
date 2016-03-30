@@ -1,25 +1,44 @@
-import events from 'events'
-var emitter = new events.EventEmitter();
-
 import Scheduler from './exercises-scheduler'
-var scheduler = new Scheduler();
 
-export let stage = null;
-export function setStage(newStage) {
-	stage = newStage;
+let instance = null;
+
+class Engine {
+	constructor() {
+		if (instance)
+			return instance;
+
+		instance = this;
+
+		this._exercises = null;
+		this._scheduler = new Scheduler();
+	}
+
+	get scheduler() {
+		return this._scheduler;
+	}
+
+	set gameData(exercises) {
+		try {
+			var json = JSON.parse(exercises);
+			this._exercises = json.exercises;
+		} catch(e) {
+			this._exercises = null;
+		}
+
+		this.scheduler.exercises = this.gameData;
+	}
+
+	get gameData() {
+		return this._exercises;
+	}
+
+	set stage(stage) {
+		this._stage = stage;
+	}
+
+	get stage() {
+		return this._stage;
+	}
 }
 
-export function gameSourceCodeChanged(code) {
-	emitter.emit('sourceCodeChanged', code);
-}
-
-export function engine() {
-	emitter.on('sourceCodeChanged', function(code) {
-		// On source code change
-        console.log(code);
-		var JsonCode = JSON.parse(code);
-        console.log(JsonCode);
-
-		scheduler.exercises = JsonCode.exercises;
-	});
-}
+export default new Engine();
