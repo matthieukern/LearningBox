@@ -5,6 +5,7 @@ export default class ExAssociationOneToOne {
 		this.elementSprite = null;
 		this.possibilitySprite = null;
 		this.errorsSprites = [];
+        this.success = false;
 		this.init();
     }
 
@@ -37,11 +38,34 @@ export default class ExAssociationOneToOne {
 	}
 
 	onPossibilityClick() {
+        if (this.success)
+            return;
+        this.success = true;
+        this.stage.removeChild(this.failureSprite);
+        this.stage.removeChild(this.successSprite);
+        this.successSprite = this.drawText('Juste', this.width / 4, this.height / 6);
+        this.stage.addChild(this.successSprite);
+        this.stage.update();
+        setTimeout(() => {
+            this.stage.removeChild(this.successSprite);
+            this.stage.update();
+        }, 3000);
 		console.log('ok');
 	}
 
 	onErrorClicked() {
-		console.log('ko');
+        if (this.success)
+            return;
+        this.stage.removeChild(this.failureSprite);
+        this.stage.removeChild(this.successSprite);
+        this.failureSprite = this.drawText('Faux', this.width / 4, this.height / 6);
+        this.stage.addChild(this.failureSprite);
+        this.stage.update();
+        setTimeout(() => {
+            this.stage.removeChild(this.failureSprite);
+            this.stage.update();
+        }, 3000);
+        console.log('ko');
 	}
 
 	displayPossibilities() {
@@ -51,13 +75,13 @@ export default class ExAssociationOneToOne {
 		for (var i = 0 ; i < max ; ++i) {
 			if (i == possibilityIndex) {
 				this.possibilitySprite = this.drawElement(this.data.possibility, this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
-				this.possibilitySprite.addEventListener('click', this.onPossibilityClick);
+				this.possibilitySprite.addEventListener('click', this.onPossibilityClick.bind(this));
 
 				this.stage.addChild(this.possibilitySprite);
 			} else {
 				console.log(i + ', ' + max);
 				var newElem = this.drawElement(this.data.errors[i - (i > possibilityIndex ? 1 : 0)], this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
-				newElem.addEventListener('click', this.onErrorClicked);
+				newElem.addEventListener('click', this.onErrorClicked.bind(this));
 
 				this.stage.addChild(newElem);
 				this.errorsSprites.push(newElem);
