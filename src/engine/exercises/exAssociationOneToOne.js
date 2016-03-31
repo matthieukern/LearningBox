@@ -2,19 +2,101 @@ export default class ExAssociationOneToOne {
     constructor(stage, data) {
         this.stage = stage;
         this.data = data;
-        this.checkData();
-        this.test();
-        console.log("ExAssociationOneToOne");
+		this.elementSprite = null, this.possibilitySprite = null, this.errorsSprites = [];
+		this.init();
     }
 
-    checkData() {
-    }
+	set data(data) {
+		if (data.element == null ||
+			data.possibility == null) {
+			throw {
+				message: 'Data not reliable.'
+			};
+		}
 
-    test() {
-        var bitmap = new createjs.Text("TEST");
-        this.stage.addChild(bitmap);
+		this._data = data;
+	}
 
-        console.log("NEW TEST SHAPE");
-        this.stage.update();
-    }
+	get data() {
+		return this._data;
+	}
+
+	init() {
+		this.width = this.stage.canvas.width;
+		this.height = this.stage.canvas.height;
+
+		this.drawDelimiter();
+
+		console.log(this.data);
+		this.elementSprite = this.drawElement(this.data.element, this.width / 4, this.height / 2);
+		this.displayPossibilities();
+
+		this.stage.update();
+	}
+
+	onPossibilityClick() {
+		console.log('ok');
+	}
+
+	onErrorClicked() {
+		console.log('ko');
+	}
+
+	displayPossibilities() {
+		var max = this.data.errors.length + 1;
+		var possibilityIndex = Math.floor(Math.random() * max);
+
+		for (var i = 0 ; i < max ; ++i) {
+			if (i == possibilityIndex) {
+				this.possibilitySprite = this.drawElement(this.data.possibility, this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
+				this.possibilitySprite.addEventListener('click', this.onPossibilityClick);
+
+				this.stage.addChild(this.possibilitySprite);
+			} else {
+				console.log(i + ', ' + max);
+				var newElem = this.drawElement(this.data.errors[i - (i > possibilityIndex ? 1 : 0)], this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
+				newElem.addEventListener('click', this.onErrorClicked);
+
+				this.stage.addChild(newElem);
+				this.errorsSprites.push(newElem);
+			}
+		}
+	}
+
+	drawDelimiter() {
+		var delimiter = new createjs.Shape();
+		delimiter.graphics.beginFill("black").drawRect(this.width / 2 - 2, 0, 4, this.height);
+		this.stage.addChild(delimiter);
+	}
+
+	drawElement(elem, x, y) {
+		console.log(elem);
+		if (elem.type == "text")
+			return this.drawText(elem.value, x, y);
+		if (elem.type == "image_url")
+			return this.drawImageByURL(elem.value, x, y);
+	}
+
+	drawText(text, x, y) {
+		var bitmap = new createjs.Text(text, "bold 36pt Arial");
+		bitmap.setTransform(x - bitmap.getBounds().width / 2, y - bitmap.getBounds().height);
+		this.stage.addChild(bitmap);
+		return bitmap;
+	}
+
+	drawImageByURL(url, x, y) {
+		var bitmap = new createjs.Bitmap(url);
+
+		var scalex = (this.width / 8 * 3) / bitmap.getBounds().width;
+		var scaley = (this.height / 5) / bitmap.getBounds().height;
+		var scale = scalex > scaley ? scaley : scalex;
+
+		bitmap.setTransform(x - (bitmap.getBounds().width * scale) / 2, y - (bitmap.getBounds().height * scale) / 2, scale, scale);
+		this.stage.addChild(bitmap);
+		return bitmap;
+	}
+
+	dispose() {
+		this.stage.removeAllChildren();
+	}
 }

@@ -5,7 +5,11 @@ export default class Exercises {
         this.stage = stage;
         this.dataExo = dataExo;
         this.exercises = null;
-        this.checkExercises();
+		try {
+			this.checkExercises();
+		} catch(e) {
+			console.log(e.message);
+		}
     }
 
     checkExercises () {
@@ -21,5 +25,7 @@ export default class Exercises {
 
     dispose() {
         // TODO: dispose all data
+		if (this.exercises)
+			this.exercises.dispose();
     }
 }

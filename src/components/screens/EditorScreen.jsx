@@ -31,6 +31,13 @@ var EditorScreen = React.createClass({
             });
         this.workspace.addChangeListener(this.onCodeUpdate);
 
+		// TODO: Remove this debug...
+		if (localStorage.getItem('debug_blocs_xml')) {
+			var xml_text = localStorage.getItem('debug_blocs_xml');
+			var xml = Blockly.Xml.textToDom(xml_text);
+			Blockly.Xml.domToWorkspace(this.workspace, xml);
+		}
+
         var blocklyToolboxDiv = document.getElementsByClassName('blocklyToolboxDiv')[0];
         var blocklyTooltipDiv = document.getElementsByClassName('blocklyTooltipDiv')[0];
         var blocklyWidgetDiv = document.getElementsByClassName('blocklyWidgetDiv')[0];
@@ -47,6 +54,11 @@ var EditorScreen = React.createClass({
 
     onCodeUpdate: function() {
 		Engine.gameData = Blockly.JavaScript.workspaceToCode(this.workspace);
+
+		// TODO: Remove this debug...
+		var xml = Blockly.Xml.workspaceToDom(this.workspace);
+		var xml_text = Blockly.Xml.domToText(xml);
+		localStorage.setItem('debug_blocs_xml', xml_text);
     },
 
 	_showGameScene: function() {
