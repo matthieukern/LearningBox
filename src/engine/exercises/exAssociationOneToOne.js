@@ -2,7 +2,9 @@ export default class ExAssociationOneToOne {
     constructor(stage, data) {
         this.stage = stage;
         this.data = data;
-		this.elementSprite = null, this.possibilitySprite = null, this.errorsSprites = [];
+		this.elementSprite = null;
+		this.possibilitySprite = null;
+		this.errorsSprites = [];
 		this.init();
     }
 
