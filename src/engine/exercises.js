@@ -22,7 +22,7 @@ export default class Exercises {
                 break;
         }
     }
-
+    
     dispose() {
         // TODO: dispose all data
 		if (this.exercises)

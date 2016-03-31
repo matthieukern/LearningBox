@@ -1,3 +1,5 @@
+import Engine from '../engine'
+
 export default class ExAssociationOneToOne {
     constructor(stage, data) {
         this.stage = stage;
@@ -49,6 +51,7 @@ export default class ExAssociationOneToOne {
         setTimeout(() => {
             this.stage.removeChild(this.successSprite);
             this.stage.update();
+            this.completeExercise();
         }, 3000);
 		console.log('ok');
 	}
@@ -67,6 +70,14 @@ export default class ExAssociationOneToOne {
         }, 3000);
         console.log('ko');
 	}
+
+    completeExercise() {
+        this.stage.removeAllChildren();
+        this.drawText("Fin", this.width / 2, this.height / 2);
+        this.stage.update();
+        Engine.nextExercise();
+    }
+
 
 	displayPossibilities() {
 		var max = this.data.errors.length + 1;

@@ -49,8 +49,9 @@ class Engine {
 	}
 
 	run() {
+		console.log(this.scheduler.currentExerciseData);
 		this.stop();
-		this._currentExercise = new Exercise(this.stage, this.scheduler.currentExerciseData);
+		this._currentExercise = new Exercise(this.stage, this.scheduler.currentExerciseData, this);
 	}
 
 	stop() {
@@ -63,11 +64,12 @@ class Engine {
 	}
 
 	nextExercise() {
-		this.scheduler.next(this.run);
+		console.log("nedxt");
+		this.scheduler.next(this.run.bind(this));
 	}
 
 	previousExercise() {
-		this.scheduler.prev(this.run);
+		this.scheduler.prev(this.run.bind(this));
 	}
 }
 

@@ -23,14 +23,21 @@ export default class Scheduler {
 	}
 
 	next(callback) {
+		console.log("a");
+
 		if (this.exercises == null) {
+			console.log("b");
 			this._currentExercise = 0;
 			return;
 		}
 
-		if (this.exercises.length >= this._currentExercise + 1)
+		console.log(this.exercises);
+		console.log(this._currentExercise);
+
+		if (this.exercises.length <= this._currentExercise + 1)
 			return;
 
+		console.log("c");
 		this._currentExercise++;
 
 		callback();
