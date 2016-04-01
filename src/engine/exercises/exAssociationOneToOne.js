@@ -1,21 +1,24 @@
-import Engine from '../engine'
+import Engine from "../engine"
 
 export default class ExAssociationOneToOne {
-    constructor(stage, data) {
-        this.stage = stage;
-        this.data = data;
+	constructor(stage, data) {
+		this.stage = stage;
+		this.data = data;
 		this.elementSprite = null;
 		this.possibilitySprite = null;
 		this.errorsSprites = [];
-        this.success = false;
+		this.success = false;
+		this.lastClick = null;
+		this.wrongFilter = new createjs.ColorFilter(0.25, 0.75, 1, 1);
+		this.rightFilter = new createjs.ColorFilter(0.25, 0.75, 1, 1);
 		this.loadData();
-    }
+	}
 
 	set data(data) {
 		if (data.element == null ||
 			data.possibility == null) {
 			throw {
-				message: 'Data not reliable.'
+				message: "Data not reliable."
 			};
 		}
 
@@ -27,9 +30,8 @@ export default class ExAssociationOneToOne {
 	}
 
 	loadData() {
-		console.log("loaddata");
-		createjs.Sound.registerSound('incorrectAnswer.mp3', 'incorrectAnswer');
-		createjs.Sound.registerSound('correctAnswer.mp3', 'correctAnswer');
+		createjs.Sound.registerSound("incorrectAnswer.mp3", "incorrectAnswer");
+		createjs.Sound.registerSound("correctAnswer.mp3", "correctAnswer");
 		this.loader = new createjs.LoadQueue(false);
 		this.loader.addEventListener("complete", this.init.bind(this));
 		var manifest = [];
@@ -42,12 +44,10 @@ export default class ExAssociationOneToOne {
 			if (this.data.errors[i].type == "image_url")
 				manifest.push(this.data.errors[i].value);
 		}
-		console.log(manifest);
 		this.loader.loadManifest(manifest);
 	}
 
 	init() {
-		console.log("init");
 		this.width = this.stage.canvas.width;
 		this.height = this.stage.canvas.height;
 
@@ -61,39 +61,72 @@ export default class ExAssociationOneToOne {
 	}
 
 	onPossibilityClick(event) {
-        if (this.success)
-            return;
-        this.success = true;
-		createjs.Sound.play('correctAnswer');
-        event.target.color = "green";
-        this.stage.update();
-        setTimeout(() => {
-            event.target.color = "black";
-            this.stage.update();
-            this.completeExercise();
-        }, 3000);
-		console.log('ok');
+		if (this.success || this.lastClick == event.target)
+			return;
+		this.lastClick = event.target;
+		this.success = true;
+		createjs.Sound.play("correctAnswer");
+		this.highlightOnClick(event, "right");
+		console.log("ok");
 	}
 
 	onErrorClicked(event) {
-        if (this.success)
-            return;
-        createjs.Sound.play('incorrectAnswer');
-        event.target.color = "red";
-        this.stage.update();
-        setTimeout(() => {
-            event.target.color = "black";
-            this.stage.update();
-        }, 3000);
-        console.log('ko');
+		if (this.success || this.lastClick == event.target)
+			return;
+		this.lastClick = event.target;
+		createjs.Sound.play("incorrectAnswer");
+		this.shakeShape(event.target, 5);
+		this.highlightOnClick(event, "wrong");
+		console.log("ko");
 	}
 
-    completeExercise() {
-        this.stage.removeAllChildren();
-        this.drawText("Fin", this.width / 2, this.height / 2);
-        this.stage.update();
-        Engine.nextExercise();
-    }
+	shakeShape(object, time) {
+		createjs.Tween.get(object)
+			.to({ x: object.x + 10 }, 200, createjs.Ease.getBackInOut(time))
+			.to({ x: object.x - 10 }, 200, createjs.Ease.getBackInOut(time))
+			.to({ x: object.x }, 200, createjs.Ease.getBackInOut(time));
+		createjs.Ticker.setFPS(60);
+		createjs.Ticker.addEventListener("tick", this.stage);
+	}
+
+	highlightOnClick (event, type) {
+		var time = 2000;
+		if (event.target instanceof createjs.Bitmap) {
+			console.log("filter img");
+			var shape = new createjs.Shape();
+			shape.graphics.beginFill(type == "wrong" ? "red" : "green").drawRect(event.target.x, event.target.y, event.target.getBounds().width * event.target.scaleX, event.target.getBounds().height * event.target.scaleY);
+			shape.alpha = 0.3;
+			this.stage.addChild(shape);
+			if (type == "wrong")
+				this.shakeShape(shape, 5);
+			this.stage.update();
+			setTimeout(() => {
+				this.lastClick = null;
+				this.stage.removeChild(shape);
+				this.stage.update();
+				if (type == "right")
+					this.completeExercise();
+			}, 2000);
+		} else if (event.target instanceof createjs.Text) {
+			event.target.color = type == "wrong" ? "red" : "green";
+			this.stage.update();
+			setTimeout(() => {
+				this.lastClick = null;
+				event.target.color = "black";
+				this.stage.update();
+				if (type == "right")
+					this.completeExercise();
+			}, 2000);
+		}
+	}
+
+
+	completeExercise() {
+		this.stage.removeAllChildren();
+		this.drawText("Fin", this.width / 2, this.height / 2);
+		this.stage.update();
+		Engine.nextExercise();
+	}
 
 
 	displayPossibilities() {
@@ -103,13 +136,13 @@ export default class ExAssociationOneToOne {
 		for (var i = 0 ; i < max ; ++i) {
 			if (i == possibilityIndex) {
 				this.possibilitySprite = this.drawElement(this.data.possibility, this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
-				this.possibilitySprite.addEventListener('click', this.onPossibilityClick.bind(this));
+				this.possibilitySprite.addEventListener("click", this.onPossibilityClick.bind(this));
 
 				this.stage.addChild(this.possibilitySprite);
 			} else {
-				console.log(i + ', ' + max);
+				console.log(i + ", " + max);
 				var newElem = this.drawElement(this.data.errors[i - (i > possibilityIndex ? 1 : 0)], this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
-				newElem.addEventListener('click', this.onErrorClicked.bind(this));
+				newElem.addEventListener("click", this.onErrorClicked.bind(this));
 
 				this.stage.addChild(newElem);
 				this.errorsSprites.push(newElem);
