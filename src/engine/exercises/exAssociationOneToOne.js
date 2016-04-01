@@ -8,9 +8,7 @@ export default class ExAssociationOneToOne {
 		this.possibilitySprite = null;
 		this.errorsSprites = [];
         this.success = false;
-		createjs.Sound.registerSound('incorrectAnswer.mp3', 'incorrectAnswer');
-		createjs.Sound.registerSound('correctAnswer.mp3', 'correctAnswer');
-		this.init();
+		this.loadData();
     }
 
 	set data(data) {
@@ -28,7 +26,28 @@ export default class ExAssociationOneToOne {
 		return this._data;
 	}
 
+	loadData() {
+		console.log("loaddata");
+		createjs.Sound.registerSound('incorrectAnswer.mp3', 'incorrectAnswer');
+		createjs.Sound.registerSound('correctAnswer.mp3', 'correctAnswer');
+		this.loader = new createjs.LoadQueue(false);
+		this.loader.addEventListener("complete", this.init.bind(this));
+		var manifest = [];
+		if (this.data.element.type == "image_url")
+			manifest.push(this.data.element.value);
+		if (this.data.possibility.type == "image_url")
+			manifest.push(this.data.possibility.value);
+		for (var i = 0; i < this.data.errors.length; ++i)
+		{
+			if (this.data.errors[i].type == "image_url")
+				manifest.push(this.data.errors[i].value);
+		}
+		console.log(manifest);
+		this.loader.loadManifest(manifest);
+	}
+
 	init() {
+		console.log("init");
 		this.width = this.stage.canvas.width;
 		this.height = this.stage.canvas.height;
 
@@ -128,7 +147,7 @@ export default class ExAssociationOneToOne {
 	}
 
 	drawImageByURL(url, x, y) {
-		var bitmap = new createjs.Bitmap(url);
+		var bitmap = new createjs.Bitmap(this.loader.getResult(url));
 
 		var scalex = (this.width / 8 * 3) / bitmap.getBounds().width;
 		var scaley = (this.height / 5) / bitmap.getBounds().height;
