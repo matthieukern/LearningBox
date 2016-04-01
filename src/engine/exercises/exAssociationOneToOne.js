@@ -84,18 +84,26 @@ export default class ExAssociationOneToOne {
 		for (var i = 0 ; i < max ; ++i) {
 			if (i == possibilityIndex) {
 				this.possibilitySprite = this.drawElement(this.data.possibility, this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
+				this.drawHitArea(this.possibilitySprite);
 				this.possibilitySprite.addEventListener('click', this.onPossibilityClick.bind(this));
 
 				this.stage.addChild(this.possibilitySprite);
 			} else {
 				console.log(i + ', ' + max);
 				var newElem = this.drawElement(this.data.errors[i - (i > possibilityIndex ? 1 : 0)], this.width * 3 / 4, (this.height / (max + 1)) * (i + 1));
+				this.drawHitArea(newElem);
 				newElem.addEventListener('click', this.onErrorClicked.bind(this));
 
 				this.stage.addChild(newElem);
 				this.errorsSprites.push(newElem);
 			}
 		}
+	}
+
+	drawHitArea(object) {
+		var hit = new createjs.Shape();
+		hit.graphics.beginFill("#000").drawRect(0, 0, object.getMeasuredWidth(), object.getMeasuredHeight());
+		object.hitArea = hit;
 	}
 
 	drawDelimiter() {
