@@ -8,6 +8,8 @@ export default class ExAssociationOneToOne {
 		this.possibilitySprite = null;
 		this.errorsSprites = [];
         this.success = false;
+		createjs.Sound.registerSound('incorrectAnswer.mp3', 'incorrectAnswer');
+		createjs.Sound.registerSound('correctAnswer.mp3', 'correctAnswer');
 		this.init();
     }
 
@@ -39,33 +41,29 @@ export default class ExAssociationOneToOne {
 		this.stage.update();
 	}
 
-	onPossibilityClick() {
+	onPossibilityClick(event) {
         if (this.success)
             return;
         this.success = true;
-        this.stage.removeChild(this.failureSprite);
-        this.stage.removeChild(this.successSprite);
-        this.successSprite = this.drawText('Juste', this.width / 4, this.height / 6);
-        this.stage.addChild(this.successSprite);
+		createjs.Sound.play('correctAnswer');
+        event.target.color = "green";
         this.stage.update();
         setTimeout(() => {
-            this.stage.removeChild(this.successSprite);
+            event.target.color = "black";
             this.stage.update();
             this.completeExercise();
         }, 3000);
 		console.log('ok');
 	}
 
-	onErrorClicked() {
+	onErrorClicked(event) {
         if (this.success)
             return;
-        this.stage.removeChild(this.failureSprite);
-        this.stage.removeChild(this.successSprite);
-        this.failureSprite = this.drawText('Faux', this.width / 4, this.height / 6);
-        this.stage.addChild(this.failureSprite);
+        createjs.Sound.play('incorrectAnswer');
+        event.target.color = "red";
         this.stage.update();
         setTimeout(() => {
-            this.stage.removeChild(this.failureSprite);
+            event.target.color = "black";
             this.stage.update();
         }, 3000);
         console.log('ko');
