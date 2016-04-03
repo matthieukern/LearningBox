@@ -45,6 +45,8 @@ export default class ExAssociationOneToOne {
 				manifest.push(this.data.errors[i].value);
 		}
 		this.loader.loadManifest(manifest);
+		if (manifest.length == 0)
+			this.init();
 	}
 
 	init() {
@@ -92,7 +94,6 @@ export default class ExAssociationOneToOne {
 	highlightOnClick (event, type) {
 		var time = 2000;
 		if (event.target instanceof createjs.Bitmap) {
-			console.log("filter img");
 			var shape = new createjs.Shape();
 			shape.graphics.beginFill(type == "wrong" ? "red" : "green").drawRect(event.target.x, event.target.y, event.target.getBounds().width * event.target.scaleX, event.target.getBounds().height * event.target.scaleY);
 			shape.alpha = 0.3;
