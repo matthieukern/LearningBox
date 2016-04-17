@@ -32,11 +32,26 @@ var EditorScreen = React.createClass({
         this.workspace.addChangeListener(this.onCodeUpdate);
 
 		// TODO: Remove this debug...
-		if (localStorage.getItem('debug_blocs_xml')) {
-			var xml_text = localStorage.getItem('debug_blocs_xml');
-			var xml = Blockly.Xml.textToDom(xml_text);
-			Blockly.Xml.domToWorkspace(this.workspace, xml);
-		}
+//		if (localStorage.getItem('debug_blocs_xml')) {
+//			var xml_text = localStorage.getItem('debug_blocs_xml');
+//			var xml = Blockly.Xml.textToDom(xml_text);
+//			Blockly.Xml.domToWorkspace(this.workspace, xml);
+//		}
+
+        if (this.props.params.id)
+        {
+            var exo = localStorage.getItem('exercises');
+            exo = JSON.parse(exo);
+            for (var i = 0; i < exo.exercises.length; ++i)
+            {
+                if (exo.exercises[i].id == this.props.params.id)
+                {
+                    var xml = Blockly.Xml.textToDom(exo.exercises[i].data);
+        			Blockly.Xml.domToWorkspace(this.workspace, xml);
+                }
+            }
+
+        }
 
         var blocklyToolboxDiv = document.getElementsByClassName('blocklyToolboxDiv')[0];
         var blocklyTooltipDiv = document.getElementsByClassName('blocklyTooltipDiv')[0];
@@ -52,13 +67,36 @@ var EditorScreen = React.createClass({
             blocklyWidgetDiv.style.zIndex = 1;
     },
 
+    updateExo: function(exercises, exo, id, name) {
+        console.log(exercises);
+        for (var i = 0; i < exercises.exercises.length; ++i)
+        {
+            if (exercises.exercises[i].id == id)
+            {
+                exercises.exercises[i].data = exo;
+                return;
+            }
+        }
+        exercises.exercises.push({name: name, id : name + (new Date().getTime()), data : exo});
+    },
     onCodeUpdate: function() {
+
 		Engine.gameData = Blockly.JavaScript.workspaceToCode(this.workspace);
 
 		// TODO: Remove this debug...
 		var xml = Blockly.Xml.workspaceToDom(this.workspace);
 		var xml_text = Blockly.Xml.domToText(xml);
-		localStorage.setItem('debug_blocs_xml', xml_text);
+        var exo = localStorage.getItem('exercises');
+        exo = JSON.parse(exo);
+        if (exo == null) {
+            exo = {exercises: []};
+        }
+        console.log('exo');
+        console.log(exo);
+        this.updateExo(exo, xml_text,this.props.params.id , 'aze');
+        console.log(exo);
+        localStorage.setItem('exercises', JSON.stringify(exo));
+//		localStorage.setItem('debug_blocs_xml', xml_text);
     },
 
 	_showGameScene: function() {
