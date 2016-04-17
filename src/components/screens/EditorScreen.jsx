@@ -77,13 +77,14 @@ var EditorScreen = React.createClass({
                 return;
             }
         }
-        exercises.exercises.push({name: name, id : name + (new Date().getTime()), data : exo});
+        id = name + (new Date().getTime());
+        exercises.exercises.push({name: name, id : id, data : exo});
+        this.props.params.id = id;
     },
     onCodeUpdate: function() {
 
 		Engine.gameData = Blockly.JavaScript.workspaceToCode(this.workspace);
 
-		// TODO: Remove this debug...
 		var xml = Blockly.Xml.workspaceToDom(this.workspace);
 		var xml_text = Blockly.Xml.domToText(xml);
         var exo = localStorage.getItem('exercises');
@@ -91,9 +92,7 @@ var EditorScreen = React.createClass({
         if (exo == null) {
             exo = {exercises: []};
         }
-        console.log('exo');
-        console.log(exo);
-        this.updateExo(exo, xml_text,this.props.params.id , 'aze');
+        this.updateExo(exo, xml_text,this.props.params.id , xml.firstChild.firstChild.firstChild);
         console.log(exo);
         localStorage.setItem('exercises', JSON.stringify(exo));
 //		localStorage.setItem('debug_blocs_xml', xml_text);
