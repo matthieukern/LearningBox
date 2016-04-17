@@ -15,14 +15,14 @@ Blockly.Blocks['exercises'] = {
 	}
 };
 
-Blockly.JavaScript['execises'] = function(block) {
+Blockly.JavaScript['exercises'] = function(block) {
 	var statements_exerciceslistname = block.getFieldValue('ExercicesListName');
 	var statements_exercices = Blockly.JavaScript.statementToCode(block, 'Exercices');
 	statements_exercices = statements_exercices.slice(0, statements_exercices.length - 2);
 	// TODO: Assemble JavaScript into code variable.
 	var code =
 		'{\n' +
-		'"exercisesListName": [\n' + statements_exerciceslistname + '\n]' +
+		'"exercisesListName": "' + statements_exerciceslistname + '",' +
 		'"exercises": [\n' + statements_exercices + '\n]' +
 		'}\n';
 	return code;
