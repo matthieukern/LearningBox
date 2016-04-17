@@ -11,7 +11,7 @@ var GalleryScreen = React.createClass({
 
 		return (
 			<MDLItem>
-				<b>{exercise.title}</b> <Link to={`/editor/${exercise.id}`}><MDLButton colored>Éditer</MDLButton></Link>
+				<b>{exercise.name}</b> <Link to={`/editor/${exercise.id}`}><MDLButton colored>Éditer</MDLButton></Link>
 			</MDLItem>
 		);
 	}

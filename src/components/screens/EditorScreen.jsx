@@ -38,8 +38,12 @@ var EditorScreen = React.createClass({
 //			Blockly.Xml.domToWorkspace(this.workspace, xml);
 //		}
 
+        console.log("params");
+        console.log(this.props.params);
         if (this.props.params.id)
         {
+            console.log("params");
+            console.log(this.props.params);
             var exo = localStorage.getItem('exercises');
             exo = JSON.parse(exo);
             for (var i = 0; i < exo.exercises.length; ++i)
@@ -67,17 +71,29 @@ var EditorScreen = React.createClass({
             blocklyWidgetDiv.style.zIndex = 1;
     },
 
+    hash: function(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (var i = 0; i < str.length; i++) {
+        var char = str.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash;
+    }
+    return hash;
+    },
+
     updateExo: function(exercises, exo, id, name) {
-        console.log(exercises);
         for (var i = 0; i < exercises.exercises.length; ++i)
         {
             if (exercises.exercises[i].id == id)
             {
                 exercises.exercises[i].data = exo;
+                exercises.exercises[i].name = name;
                 return;
             }
         }
         id = name + (new Date().getTime());
+        id = this.hash(id);
         exercises.exercises.push({name: name, id : id, data : exo});
         this.props.params.id = id;
     },
@@ -92,7 +108,7 @@ var EditorScreen = React.createClass({
         if (exo == null) {
             exo = {exercises: []};
         }
-        this.updateExo(exo, xml_text,this.props.params.id , xml.firstChild.firstChild.firstChild);
+        this.updateExo(exo, xml_text,this.props.params.id , xml.firstChild.firstChild.firstChild.nodeValue);
         console.log(exo);
         localStorage.setItem('exercises', JSON.stringify(exo));
 //		localStorage.setItem('debug_blocs_xml', xml_text);

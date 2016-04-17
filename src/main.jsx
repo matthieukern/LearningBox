@@ -14,6 +14,7 @@ ReactDOM.render(
         <Route path="/" component={Layout}>
             <IndexRoute component={MainScreen} />
             <Route path="editor" component={EditorScreen} />
+              <Route path="editor/:id" component={EditorScreen}/>
             <Route path="gallery" component={GalleryScreen} />
             <Route path="about" component={AboutScreen} />
         </Route>
